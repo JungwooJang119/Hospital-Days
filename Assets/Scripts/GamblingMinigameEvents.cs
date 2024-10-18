@@ -1,11 +1,16 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class GamblingMinigameEvents : MonoBehaviour
 {
     // Reference to Gambling Minigame
     public GameObject gamblingMinigame;
+
+    public TextMeshProUGUI tmpText;
+    public GameObject StatusText;
 
     // Reference to UI Document
     private UIDocument _document;
@@ -511,7 +516,9 @@ public class GamblingMinigameEvents : MonoBehaviour
         // Check to see if gambler lost the game
         if (newCurr > int.Parse(_goalScore.text))
         {
-            Debug.Log("You gambled too hard. :(");
+            // Debug.Log("You gambled too hard. :(");
+            tmpText.text = "You gambled too hard. :(";
+            StartCoroutine(ShowText(3));
             _container.style.visibility = Visibility.Hidden;
             UnityEngine.Cursor.visible = false;
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
@@ -557,11 +564,19 @@ public class GamblingMinigameEvents : MonoBehaviour
         {
             reward = 0;
         }
-        Debug.Log("Nice gambling! You've won " + reward + " of something!");
+        // Debug.Log("Nice gambling! You've won " + reward + " of something!");
+        tmpText.text = "Nice gambling! You've won " + reward + " of something!";
+        StartCoroutine(ShowText(3));
 
         // Hide gambling game
         _container.style.visibility = Visibility.Hidden;
         UnityEngine.Cursor.visible = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    IEnumerator ShowText(int seconds) {
+        StatusText.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        StatusText.SetActive(false);
     }
 }
